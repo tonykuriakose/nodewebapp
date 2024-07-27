@@ -23,7 +23,4 @@ router.get("/unblockCustomer",adminAuth,customerController.customerunBlocked);
 
 
 
-
-
-
 module.exports = router;
