@@ -8,7 +8,6 @@ const db = require("./config/db");
 const userRouter = require('./routes/userRouter');
 const adminRouter = require('./routes/adminRouter');
 db();
-
 const app = express();
 
 app.use(express.json());
@@ -50,3 +49,4 @@ app.listen(PORT, () => {
 });
 
 module.exports = app;
+
