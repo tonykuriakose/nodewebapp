@@ -80,70 +80,67 @@ const addCategoryOffer = async (req, res) => {
   }
 };
 
-
-const removeCategoryOffer = async (req,res)=>{
+const removeCategoryOffer = async (req, res) => {
   try {
-
     const categoryId = req.body.categoryId;
     const category = await Category.findById(categoryId);
 
-    if(!category){
-      return res.status(404).json({status:false , message:"Category not found"})
+    if (!category) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Category not found" });
     }
 
     const percentage = category.categoryOffer;
-    const products = await Product.find({category:category._id});
+    const products = await Product.find({ category: category._id });
 
-    if(products.length > 0){
-      for(const product of products){
-        product.salePrice +=Math.floor(product.regularPrice * (percentage/100));
+    if (products.length > 0) {
+      for (const product of products) {
+        product.salePrice += Math.floor(
+          product.regularPrice * (percentage / 100)
+        );
         product.productOffer = 0;
         await product.save();
       }
     }
     category.categoryOffer = 0;
     await category.save();
-    res.json({status:true});
-    
+    res.json({ status: true });
   } catch (error) {
-    res.status(500).json({status:false , message:"Internal Server Error"})
-    
+    res.status(500).json({ status: false, message: "Internal Server Error" });
   }
-}
+};
 
-
-const listCategory = async (req,res)=>{
+const getListCategory = async (req,res)=>{
   try {
-    const id = req.query.id;
-    await Category.findByIdAndUpdate(id,{isListed:false});
+    let id = req.query.id;
+    await Category.updateOne({_id:id},{$set:{isListed:false}});
     res.redirect("/admin/category");
     
   } catch (error) {
-    console.error("Error listing category",error);
     res.redirect("/pageerror");
     
   }
 }
 
-const unlistCategory = async (req,res)=>{
+const getUnlistCategory = async (req,res)=>{
   try {
-
-    const id = req.query.id;
-    await Category.findByIdAndUpdate(id,{isListed:true});
+    let id = req.query.id;
+    await Category.updateOne({_id:id},{$set:{isListed:true}});
     res.redirect("/admin/category");
     
   } catch (error) {
-    console.error("Error unlisting category",error);
     res.redirect("/pageerror");
     
   }
 }
+
 
 module.exports = {
   categoryInfo,
   addCategory,
   addCategoryOffer,
   removeCategoryOffer,
-  listCategory,
-  unlistCategory,
+  getListCategory,
+  getUnlistCategory,
 };
