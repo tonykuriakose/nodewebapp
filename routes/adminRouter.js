@@ -30,6 +30,7 @@ router.get("/editCategory",adminAuth,categoryController.getEditCategory);
 router.post("/editCategory/:id",adminAuth,categoryController.editCategory);
 // Brand Management
 router.get("/brands",adminAuth,brandController.getBrandPage);
+router.post("/addBrand",adminAuth,uploads.single("image"),brandController.addBrand);
 
 
 
