@@ -19,69 +19,66 @@ const getProductAddPage = async (req, res) => {
   }
 };
 
-
-const addProducts = async (req, res) => {
+const addProducts = async (req,res)=>{
   try {
+
     const products = req.body;
     const productExists = await Product.findOne({
-      productName: products.productName,
+      productName:products.productName,
+
     });
 
-    if (!productExists) {
+    if(!productExists){
       const images = [];
 
-      if (req.files && req.files.length > 0) {
-        for (let i = 0; i < req.files.length; i++) {
+      if(req.files && req.files.length>0){
+        for(let i=0;i<req.files.length;i++){
           const originalImagePath = req.files[i].path;
 
-          const resizedImagePath = path.join(
-            "public",
-            "uploads",
-            "product-images",
-            req.files[i].filename
-          );
-
-          await sharp(originalImagePath)
-            .resize({ width: 440, height: 440 })
-            .toFile(resizedImagePath);
-
+          const resizedImagePath =path.join('public','uploads','product-images',req.files[i].filename);
+          await sharp(originalImagePath).resize({width:440,height:440}).toFile(resizedImagePath);
           images.push(req.files[i].filename);
         }
       }
 
-      const categoryId = await Category.findOne({ name: products.category });
+      const categoryId = await Category.findOne({name:products.category});
 
-      if (!categoryId) {
-        return res.status(400).json("Invalid category name.");
+      if(!categoryId){
+        return res.status(400).join("Invalid category name")
       }
 
       const newProduct = new Product({
-        productName: products.productName,
-        description: products.description,
-        brand: products.brand,
-        category: categoryId._id,
-        regularPrice: products.regularPrice,
-        salePrice: products.salePrice,
+        productName:products.productName,
+        description:products.description,
+        brand:products.brand,
+        category:categoryId._id,
+        regularPrice:products.regularPrice,
+        salePrice:products.regularPrice,
+        salePrice:products.salePrice,
         createdOn: new Date(),
-        quantity: products.quantity,
-        size: products.size,
-        color: products.color,
-        productImage: images,
-        status: 'Available',
+        quantity:products.quantity,
+        size:products.size,
+        color:products.color,
+        productImage:images,
+        status:'Available',
+
+
       });
 
       await newProduct.save();
       return res.redirect("/admin/addProducts");
-    } else {
-      return res.status(400).json("Product already exists, please try with another name.");
+
+
+    }else {
+      return res.status(400).json("Product already exists, Please try with another name")
     }
+    
   } catch (error) {
-    console.error("Error saving product:", error);
-    return res.redirect("/admin/pageerror");
+    console.error("Error in saving product",error);
+    return res.redirect("/admin/pageerror")
+    
   }
-};
-
-
+}
 
 
 

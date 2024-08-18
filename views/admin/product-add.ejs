@@ -275,6 +275,7 @@
         const addedImagesContainer = document.getElementById("addedImagesContainer");
         addedImagesContainer.innerHTML = "";
         const files = event.target.files;
+        
         for(let i=0;i<files.length;i++){
             const file = files[i];
             selectedImages.push(file);
@@ -287,7 +288,7 @@
             img.style.width="50px";
             img.style.height="auto";
             const removeIcon = document.createElement("span");
-             removeIcon.classList.add("remove-icon");
+            removeIcon.classList.add("remove-icon");
             removeIcon.innerHTML = "&times;";
             removeIcon.addEventListener("click",function(){
                 const index = selectedImages.indexOf(file);
@@ -397,7 +398,4 @@
           }
 
 </script>
-
-
-
 <%- include("../../views/partials/admin/footer") %>

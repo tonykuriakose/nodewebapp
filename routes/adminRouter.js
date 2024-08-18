@@ -41,9 +41,4 @@ router.post("/addProducts",adminAuth,uploads.array("images",4),productController
 
 
 
-
-
-
-
-
 module.exports = router;
