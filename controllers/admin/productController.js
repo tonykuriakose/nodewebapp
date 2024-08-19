@@ -53,14 +53,14 @@ const addProducts = async (req,res)=>{
         brand:products.brand,
         category:categoryId._id,
         regularPrice:products.regularPrice,
-        salePrice:products.regularPrice,
         salePrice:products.salePrice,
-        createdOn: new Date(),
+        createdOn:new Date(),
         quantity:products.quantity,
         size:products.size,
         color:products.color,
         productImage:images,
         status:'Available',
+       
 
 
       });
@@ -68,13 +68,12 @@ const addProducts = async (req,res)=>{
       await newProduct.save();
       return res.redirect("/admin/addProducts");
 
-
     }else {
-      return res.status(400).json("Product already exists, Please try with another name")
+      return res.status(400).json("Product already exist,please try with another name");
     }
     
   } catch (error) {
-    console.error("Error in saving product",error);
+    console.error("Error saving product",error);
     return res.redirect("/admin/pageerror")
     
   }
@@ -85,7 +84,8 @@ const getAllProducts = async (req, res) => {
     const search = req.query.search || "";
     const page = req.query.page || 1;
     const limit = 4;
-
+ 
+ 
     const productData = await Product.find({
       $or: [
         { productName: { $regex: new RegExp(".*" + search + ".*", "i") } },
@@ -97,31 +97,39 @@ const getAllProducts = async (req, res) => {
     .populate('category')
     .exec();
 
+
     const count = await Product.find({
-      $or: [
-        { productName: { $regex: new RegExp(".*" + search + ".*", "i") } },
-        { brand: { $regex: new RegExp(".*" + search + ".*", "i") } },
+      $or:[
+        {productName:{$regex:new RegExp(".*"+search+".*","i")}},
+        {brand:{$regex:new RegExp(".*"+search+".*","i")}},
       ],
     }).countDocuments();
-    
-    const category = await Category.find({ isListed: true });
-    const brand = await Brand.find({ isBlocked: false });
 
-    if (category && brand) {
-      res.render("products", {
-        data: productData,
-        currentPage: page,
-        totalPages: Math.ceil(count / limit),
-        cat: category,
-        brand: brand,
-      });
-    } else {
+    const category = await Category.find({isListed:true});
+    const brand = await Brand.find({isBlocked:false});
+
+    if(category && brand){
+      res.render("products",{
+        data:productData,
+        currentPage:page,
+        totalPages:page,
+        totalPages:Math.ceil(count/limit),
+        cat:category,
+        brand:brand,
+
+
+      })
+    }else {
       res.render("page-404");
     }
+ 
   } catch (error) {
+
     res.redirect("/pageerror");
+  
   }
-};
+ };
+ 
 
 
 
