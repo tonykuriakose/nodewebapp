@@ -18,7 +18,7 @@ const login = async (req, res) => {
     const { email, password } = req.body;
     const admin = await User.findOne({ email, isAdmin: true });
     if (admin) {
-      const passwordMarch = bcrypt.compare(password, admin.password);
+      const passwordMarch = await bcrypt.compare(password, admin.password);
       if (passwordMarch) {
         req.session.admin = true;
         return res.redirect("/admin");
