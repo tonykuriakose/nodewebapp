@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const passport = require("passport");
 const userController = require('../controllers/user/userController');
+const profileController = require("../controllers/user/profileController");
+
 
 // Error Management
 router.get("/pageNotFound",userController.pageNotFound);
@@ -17,11 +19,15 @@ router.get('/auth/google/callback',passport.authenticate('google',{failureRedire
 // Login Management
 router.get("/login",userController.loadLogin);
 router.post("/login",userController.login);
-router.get("/forgot-password", userController.getForgotPassPage);
 
 // Home page & Shopping page
 router.get('/',userController.loadHomepage);
 router.get("/logout",userController.logout);
+
+// Profile Management
+router.get("/forgot-password",profileController.getForgotPassPage);
+
+
 
 
 

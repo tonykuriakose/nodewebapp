@@ -229,16 +229,6 @@ const logout = async (req,res)=>{
   }
 }
 
-const getForgotPassPage = async (req, res) => {
-  try {
-    res.render("forgot-password");
-  } catch (error) {
-     res.redirect("/pageNotFound");
-  }
-};
-
-
-
 
 module.exports = {
   loadHomepage,
@@ -250,7 +240,5 @@ module.exports = {
   pageNotFound,
   login,
   logout,
-  getForgotPassPage,
-
 
 };

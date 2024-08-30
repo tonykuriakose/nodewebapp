@@ -87,15 +87,15 @@
         font-size: 0.875rem;
       }
       .form-control {
-        font-size: 0.875rem; /* Decrease input text size */
-        padding: 0.5rem; /* Decrease padding */
+        font-size: 0.875rem; 
+        padding: 0.5rem; 
       }
       .btn-primary {
-        padding: 0.5rem 1rem; /* Decrease button padding */
-        font-size: 0.875rem; /* Decrease button text size */
+        padding: 0.5rem 1rem; 
+        font-size: 0.875rem; 
       }
       .card-title {
-        font-size: 1.25rem; /* Decrease card title size */
+        font-size: 1.25rem; 
       }
       .login-image .sign-up-link {
         color: #333;
@@ -109,23 +109,15 @@
         font-size: 0.75rem;
         display: none;
       }
-
-      .forgot-password-link {
- font-size: 0.875rem;
- color: #007bff;
- text-decoration: none;
-}
-
-
-.forgot-password-link:hover {
- color: #0056b3;
- text-decoration: underline;
-
-
-}
-
-
-
+      .forgot-password-link{
+        font-size: 0.875rem;
+        color: #007bff;
+        text-decoration: none;
+      }
+      .forgot-password-link:hover{
+        color: #0056b3;
+        text-decoration: underline;
+      }
     </style>
   </head>
   <body>
@@ -157,9 +149,9 @@
                 />
                 <div id="error2" class="error-message"></div>
               </div>
-              <div class="form-group d-flex justify-content-between">
-                <div></div>
-                <a href="/forgot-password" class="forgot-password-link">Forgot Password?</a>
+              <div class="form-group d-flex justify-content-end">
+                <a href="/forgot-password" class="forgot-password-link ms-auto">Forgot Password</a>
+
               </div>
               <%if(locals.message && message.length>0){%>
               <div class="alert alert-danger text-center">
