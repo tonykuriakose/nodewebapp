@@ -115,7 +115,7 @@ const securePassword = async (password) => {
     return passwordHash;
   } catch (error) {
     console.error("Error in securePassword:", error);
-    throw new Error("Failed to hash password");
+    throw new Error("failed to hash password");
   }
 };
 
