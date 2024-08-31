@@ -26,6 +26,11 @@ router.get("/logout",userController.logout);
 
 // Profile Management
 router.get("/forgot-password",profileController.getForgotPassPage);
+router.post("/forgot-email-valid", profileController.forgotEmailValid);
+router.post("/verify-PassForgot-otp", profileController.verifyForgotPassOtp);
+router.post("/resend-forgot-otp",profileController.resendOtp);
+router.get("/reset-password", profileController.getResetPassPage);
+router.post("/reset-password", profileController.postNewPassword);
 
 
 
