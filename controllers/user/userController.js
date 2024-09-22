@@ -1,4 +1,6 @@
 const User = require("../../models/userSchema");
+const Category = require("../../models/categorySchema");
+const Product = require("../../models/productSchema");
 const env = require("dotenv").config();
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
@@ -14,11 +16,22 @@ const pageNotFound = async (req, res) => {
 const loadHomepage = async (req, res) => {
   try {
     const user = req.session.user;
+    const categories = await Category.find({isListed:true});
+    let productData = await Product.find(
+      {isBlocked:false,
+        category:{$in:categories.map(category=>category._id)},quantity:{$gt:0}
+      }
+
+    )
+
+    productData.sort((a,b)=>new Date(b.createdOn)-new Date(a.createdOn));
+    productData = productData.slice(0,4);
+
     if (user) {
       const userData = await User.findOne({ _id: user._id });
-      return res.render("home", { user: userData });
+      return res.render("home", { user: userData ,products:productData});
     } else {
-      return res.render("home");
+      return res.render("home",{products:productData});
     }
   } catch (error) {
     console.log("Home page not loading:", error);
@@ -210,25 +223,20 @@ const login = async (req, res) => {
   }
 };
 
-const logout = async (req,res)=>{
+const logout = async (req, res) => {
   try {
-
-    req.session.destroy((err)=>{
-      if(err){
-        console.log("Session destruction error",err.message);
+    req.session.destroy((err) => {
+      if (err) {
+        console.log("Session destruction error", err.message);
         return res.redirect("/pageNotFound");
       }
-      return res.redirect("/login")
-    })
-    
+      return res.redirect("/login");
+    });
   } catch (error) {
-
-    console.log("Logout error",error);
-    res.redirect("/pageNotFound")
-    
+    console.log("Logout error", error);
+    res.redirect("/pageNotFound");
   }
-}
-
+};
 
 module.exports = {
   loadHomepage,
@@ -240,5 +248,4 @@ module.exports = {
   pageNotFound,
   login,
   logout,
-
 };
