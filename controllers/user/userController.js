@@ -1,6 +1,7 @@
 const User = require("../../models/userSchema");
 const Category = require("../../models/categorySchema");
 const Product = require("../../models/productSchema");
+const Banner = require("../../models/bannerSchema");
 const env = require("dotenv").config();
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
@@ -21,17 +22,21 @@ const loadHomepage = async (req, res) => {
       {isBlocked:false,
         category:{$in:categories.map(category=>category._id)},quantity:{$gt:0}
       }
-
     )
+    const today = new Date().toISOString();
+    const findBanner = await Banner.find({
+      startDate: { $lt: new Date(today) },
+      endDate: { $gt: new Date(today) },
+    });
 
     productData.sort((a,b)=>new Date(b.createdOn)-new Date(a.createdOn));
     productData = productData.slice(0,4);
 
     if (user) {
       const userData = await User.findOne({ _id: user._id });
-      return res.render("home", { user: userData ,products:productData});
+      return res.render("home", { user: userData ,products:productData,banner:findBanner || []});
     } else {
-      return res.render("home",{products:productData});
+      return res.render("home",{products:productData,banner:findBanner || []});
     }
   } catch (error) {
     console.log("Home page not loading:", error);
