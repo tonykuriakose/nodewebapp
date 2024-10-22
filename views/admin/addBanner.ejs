@@ -98,6 +98,15 @@ body {
 	cursor: pointer;
 	transition: all .3s ease;
 }
+
+ .thumbnails-container {
+            display: flex;
+            overflow-x: auto;
+        }
+
+        .thumbnail {
+            margin-right: 10px;
+        }
     </style>
     <section class="content-main">
         <div class="row">
@@ -178,89 +187,47 @@ body {
             </div>
         </div>
     </section>
-    <style>
-        .thumbnails-container {
-            display: flex;
-            overflow-x: auto;
-        }
-
-        .thumbnail {
-            margin-right: 10px;
-        }
-    </style>
 <script src="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.js"></script>
     <script>
-        // Array to store selected images
         const selectedImages = [];
-
-        // Function to handle file input change
         document.getElementById("imageInput").addEventListener("change", handleFileSelect);
-
         function handleFileSelect(event) {
-            // Target the container for displaying thumbnails
             const addedImagesContainer = document.getElementById("addedImagesContainer");
-
-            // Clear previous content
             addedImagesContainer.innerHTML = "";
-
             const files = event.target.files;
-
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
-
-                // Add the file to the selected images array
                 selectedImages.push(file);
-
-                // Create thumbnail element
                 const thumbnail = document.createElement("div");
                 thumbnail.classList.add("thumbnail");
-
-                // Create image element
                 const img = document.createElement("img");
                 img.src = URL.createObjectURL(file);
                 img.alt = "thumbnail";
-
-                // Set a fixed width for the image
-                img.style.width = "60px"; // Adjust the width as needed
+                img.style.width = "60px"; 
                 img.style.height = "auto";
-
-                // Create remove icon
                 const removeIcon = document.createElement("span");
                 removeIcon.classList.add("remove-icon");
-                removeIcon.innerHTML = "&times;"; // Multiplication symbol as a cross
-
-                // Event listener to remove the image on icon click
+                removeIcon.innerHTML = "&times;"; 
                 removeIcon.addEventListener("click", function () {
-                    // Remove the file from the selected images array
                     const index = selectedImages.indexOf(file);
                     if (index !== -1) {
                         selectedImages.splice(index, 1);
                     }
-
-                    // Remove the thumbnail from the container
                     thumbnail.remove();
                 });
-
-                // Append elements to thumbnail
                 thumbnail.appendChild(img);
                 thumbnail.appendChild(removeIcon);
-
-                // Append thumbnail to the container
                 addedImagesContainer.appendChild(thumbnail);
             }
         }
-
-
         document.addEventListener("DOMContentLoaded", function () {
-            // Your code here
-        });
 
+        });
 
         function validateAndSubmit() {
 
             if (validateForm()) {
-                // If validation passes, submit the form
-                document.forms[0].submit(); // Assuming this is the first (and only) form on your page
+                document.forms[0].submit(); 
             }
         }
 
@@ -291,21 +258,14 @@ body {
             const todayDateObj = new Date();
             todayDateObj.setHours(0, 0, 0, 0);
 
-
-
             if (sDateObj > eDateObj) {
                 document.getElementById('error-end-date').innerHTML = 'End date should be after the start date';
                 isValid = false;
             }
-
-
-
             if (productName === "") {
                 displayErrorMessage("productName-error", "Product Name is required");
                 isValid = false;
             }
-
-            // Additional checks for other fields
             var description = document.getElementsByName('description')[0].value;
             if (description === "") {
                 displayErrorMessage("description-error", "Description is required");
@@ -328,8 +288,6 @@ console.log(File,"File");
 
 
  }
-
-        // Additional checks can be added for other fields if needed
 
             return isValid;
         }
@@ -360,30 +318,21 @@ console.log(File,"File");
                 let dataURL = reader.result;
                 let image = document.getElementById('imgView' + index);
                 image.src = dataURL;
-
-                // Initialize Cropper.js on the image
                 let cropper = new Cropper(image, {
-                    aspectRatio:1360 / 777, // Initial aspect ratio
+                    aspectRatio:1360 / 777, 
                     viewMode: 1,
                     guides: true,
                     background: false,
                     autoCropArea: 0.8,
                     zoomable: true
                 });
-
-
-                // Show the image cropper container
                 let cropperContainer = document.querySelector('#croppedImg' + index).parentNode;
                 cropperContainer.style.display = 'block';
-
-                // Update the cropped image when the "Save" button is clicked
                 let saveButton = document.querySelector('#saveButton' + index);
                 saveButton.addEventListener('click', async function () {
                     let croppedCanvas = cropper.getCroppedCanvas();
                     let croppedImage = document.getElementById("croppedImg" + index);
                     croppedImage.src = croppedCanvas.toDataURL('image/jpeg', 1.0);
-
-                    // Generate a unique name for the cropped image file based on the current timestamp
                     let timestamp = new Date().getTime();
                     let fileName = `cropped-img-${timestamp}-${index}.png`;
 
@@ -400,9 +349,6 @@ console.log(File,"File");
             };
             reader.readAsDataURL(input.files[0]);
         }
-
-
-
     </script>
 
 <%- include("../../views/partials/admin/footer") %>
